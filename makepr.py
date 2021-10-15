@@ -244,21 +244,21 @@ def create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, l
 def parse_cmd_line():
 
     usage = '''
-This program does the following steps
+This program does the following steps; it assumes that the current directory is in a git tree.
 
 for the --new-pr option:
-    1. Creates a feature branch, and pushes the branch. (alternatively update the existing feature ranch)
+    1. Creates a feature branch for the current branch, and pushes the feature branch.
     2. Opens a pull request, it is assumed that a continuous integration build is then triggered.
     3. The program then waits that the continuous integration build for that pull request has completed.
     4. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
 for the --update-pr option:
-    1. Wush the current state of local branch to feature banch
-    2. The program then waits that the continuous integration build for the top commit has completed.
+    1. Push the current state of local branch to the feature banch
+    2. The program waits that the continuous integration build for the top commit has completed.
     3. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
 for the --wait option:
-    2. The program then waits that the continuous integration build for the top commit has completed.
+    2. The program waits that the continuous integration build for the top commit has completed.
     3. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
 This program allows you to do some sword fighting, while the continuous integration build is going on ;-(
