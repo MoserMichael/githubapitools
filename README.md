@@ -7,17 +7,21 @@ Some programs that make use of the [python github api](https://pygithub.readthed
 help text for makepr.py
 
 ```
-This program does the following steps:
+usage: makepr.py [-h] [--new-pr] [--update-pr] [--wait] [--verbose]
 
-- creates a feature branch, and pushes the branch.
-- opens a pull request, it is assumed that a continuous integration build is then triggered.
-- the program then waits that the continuous integration build for that PR has completed.
-- At the end of the build, a sound is played, and the url with the build log is written to standard output.
+This program does the following steps: - creates a feature branch, and pushes the branch. (alternatively update the existing feature ranch) - opens a pull request, it is assumed that a
+continuous integration build is then triggered. - the program then waits that the continuous integration build for that pull request has completed. - At the end of the build, a sound is
+played, and the url with the build log is written to standard output. This program allows you to do some sword fighting, while the PR build is going on ;-( This program assumes that the
+environment GITHUB_TOKEN is exported, and that it has the token of the current user. This program assumes the github api to be installed - pip install python-github-api
 
-This program allows you to do some swordfighting, while the PR build is going on ;-(
+optional arguments:
+  -h, --help       show this help message and exit
 
-This program assumes that the environment GITHUB_TOKEN is exported, and that it has the token of the current user.
-This program assumes the github api to be installed - pip install python-github-api
+push a pr and wait for continuous integration build to complete:
+  --new-pr, -n     create new pull request (default: False)
+  --update-pr, -u  update and push to existing pull request (default: False)
+  --wait, -w       wait for ongoing build of top commit to complete (default: False)
+  --verbose, -v    trace all commands, verbose output (default: False)
 ```
 
 help text for starcounter.py

@@ -7,12 +7,13 @@ import sys
 import re
 import time
 import ctypes
+import argparse
 from pathlib import Path
+from platform import system
 from github import Github
 
 # *** adapted from https://raw.githubusercontent.com/nekumelon/simpleSound/main/simpleSound.py ***
 
-from platform import system
 
 def windows_command(command):
     ctypes.windll.winmm.mciSendStringW(command, ctypes.create_unicode_buffer(600), 559, 0)
@@ -73,6 +74,8 @@ class RunCommand:
             with subprocess.Popen(shlex.split(command_line), \
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
 
+                self.command_line = command_line
+
                 (output, error_out) = process.communicate()
 
                 self.exit_code = process.wait()
@@ -84,7 +87,7 @@ class RunCommand:
                 self.exit_code = process.wait()
 
                 if RunCommand.trace_on:
-                    msg = ">exit_cod: " + str(self.exit_code)
+                    msg = ">exit_code: " + str(self.exit_code)
                     if self.output != "":
                         msg += "\n  stdout: " + self.output
                     if self.error_out != "":
@@ -128,31 +131,31 @@ def init():
     top_commit = cmd.output.rstrip('\n')
 
     if  cmd.run("git branch -r --contains " + top_commit) != 0:
-        print("Error: top commit ", top_commit, "has not been pushed yet")
+        print("Error: top commit ", top_commit, "has not been pushed yet", cmd.make_error_message())
         sys.exit(1)
 
     if cmd.run("git rev-parse --abbrev-ref HEAD") != 0:
-        print("Error: can't get current branch name")
+        print("Error: can't get current branch name", cmd.make_error_message())
         sys.exit(1)
     local_branch_name = cmd.output.rstrip('\n')
 
     if cmd.run('/bin/bash -c \'git status -b --porcelain=v2 | grep -m 1 "^# branch.upstream " | cut -d " " -f 3-\'') != 0:
-        print("Error: can't get name of remote branch")
+        print("Error: can't get name of remote branch", cmd.make_error_message())
         sys.exit(1)
     remote_branch_name = cmd.output.rstrip('\n')
 
     if cmd.run("git show -s --format='%s %h'") != 0:
-        print("Error: can't get last commit comment")
+        print("Error: can't get last commit comment", cmd.make_error_message())
         sys.exit(1)
     last_commit_sha_and_comment = cmd.output.rstrip('\n')
 
     if cmd.run("git show -s --format='%b'") != 0:
-        print("Error: can't get body of last commit")
+        print("Error: can't get body of last commit", cmd.make_error_message())
         sys.exit(1)
     last_commit_body = cmd.output
 
     if cmd.run("git config --get remote.origin.url") != 0:
-        print("Error: can't get remote origin url")
+        print("Error: can't get remote origin url", cmd.make_error_message())
         sys.exit(1)
 
     remote_origin = cmd.output
@@ -163,32 +166,36 @@ def init():
 
     repo_name = remote_origin[pos_1+1:pos_2]
     if repo_name == "":
-        print("Error: can't get repository namefrom remote url: ", remote_origin)
+        print("Error: can't get repository namefrom remote url: ", remote_origin, " ", cmd.make_error_message())
         sys.exit(1)
 
     print("top_commit:", top_commit, \
             "repo_name:", repo_name, \
             "local_branch_name:", local_branch_name, \
-            "remote_branch_name:", remote_branch_name, \
+            "remote_branch_name: ", remote_branch_name, \
             "last-commit-comment:", last_commit_sha_and_comment, \
             "last-commit-body: ", last_commit_body)
     return top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body
 
 
 def wait_for_commit_to_build(repo, commit):
-    #print("Commit: ", commit)
-    #print(repo.full_name)
-
     commit = repo.get_commit(commit)
     print(commit)
 
     print("Waiting for the build to complete...")
+    if RunCommand.trace_on:
+        print("Commit: ", commit)
+        print(repo.full_name)
 
     while True:
-        #print(".", end="")
-        print("\nchecking statuses...")
+        if not RunCommand.trace_on:
+            print(".", end="", flush=True)
+        else:
+            print("\nchecking statuses...")
+
         for status in commit.get_statuses():
-            print( "created_at", status.created_at ,"creator:", status.creator,  " id:", status.id, "state:", status.state, "context:", status.context, "target_url:", status.target_url,  "url:", status.url, "description:", status.description )
+            if RunCommand.trace_on:
+                print( "created_at", status.created_at ,"creator:", status.creator,  " id:", status.id, "state:", status.state, "context:", status.context, "target_url:", status.target_url,  "url:", status.url, "description:", status.description )
 
             if status.context == "build":
                 if status.state == "success":
@@ -210,11 +217,11 @@ def create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, l
 
     #if cmd.run("git checkout -b " + local_br_name) != 0:
     if cmd.run("git branch -m " + local_br_name) != 0:
-        print("Error: can't rename branch to  branch_name")
+        print("Error: can't rename branch to  branch_name", cmd.make_error_message())
         sys.exit(1)
 
     if cmd.run("git push --set-upstream origin " + local_br_name + ":feature/" + local_br_name) != 0:
-        print("Error: can't push to feature/" + local_br_name)
+        print("Error: can't push to feature/" + local_br_name, " ", cmd.make_error_message())
         sys.exit(1)
 
     base_name = "feature/" + local_br_name
@@ -234,27 +241,58 @@ def create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, l
 
     print("pull request created: ", pull_request)
 
-def show_help():
-    print("""This program does the following steps:
+def parse_cmd_line():
 
-- creates a feature branch, and pushes the branch. 
+    usage = '''
+This program does the following steps:
+
+- creates a feature branch, and pushes the branch. (alternatively update the existing feature ranch)
 - opens a pull request, it is assumed that a continuous integration build is then triggered.
-- the program then waits that the continuous integration build for that PR has completed.
+- the program then waits that the continuous integration build for that pull request has completed.
 - At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
-This program allows you to do some swordfighting, while the PR build is going on ;-(
+This program allows you to do some sword fighting, while the PR build is going on ;-(
 
 This program assumes that the environment GITHUB_TOKEN is exported, and that it has the token of the current user.
-This program assumes the github api to be installed - pip install python-github-api""")
+This program assumes the github api to be installed - pip install python-github-api
 
-    sys.exit(1)
+'''
+    parse = argparse.ArgumentParser(description=usage, \
+                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    group = parse.add_argument_group("push a pr and wait for continuous integration build to complete")
+
+    group.add_argument('--new-pr', '-n',  default=False, \
+            action='store_true', dest='new_pr', help='create new pull request')
+
+    group.add_argument('--update-pr', '-u',  default=False, \
+            action='store_true', dest='update_pr', help='update and push to existing pull request')
+
+    group.add_argument('--wait', '-w',  default=False, \
+            action='store_true', dest='wait', help='wait for ongoing build of top commit to complete')
+
+    group.add_argument('--verbose', '-v',  default=False, \
+            action='store_true', dest='verbose', help='trace all commands, verbose output')
+
+
+    return parse.parse_args(), parse
+
+def push_state_to_branch(remote_branch_name):
+    if not remote_branch_name.startswith("origin/feature/"):
+        print("Error. Remote origin does not start with 'origin/feature', curent remote branch name is:", remote_branch_name)
+        sys.exit(1)
+
+    cmd = RunCommand()
+    if cmd.run("git push origin HEAD:" + remote_branch_name[7:]) != 0:
+        print("Error: can't push  local changes. ", cmd.make_error_message())
+        sys.exit(1)
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == '-h':
-        show_help()
+    cmd_args, _ = parse_cmd_line()
 
-    RunCommand.trace_on = True
+    if cmd_args.verbose:
+        RunCommand.trace_on = True
 
     top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body = init()
 
@@ -271,10 +309,17 @@ def main():
     org = github.get_organization("traiana")
     repo = org.get_repo(repo_name)
 
-    create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, last_commit_body)
+    if cmd_args.new_pr:
+        create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, last_commit_body)
+    elif cmd_args.update_pr:
+        push_state_to_branch(remote_branch_name)
+    elif cmd_args.wait:
+        pass
+    else:
+        print("Error: action not specified")
+        sys.exit(1)
 
     status, url = wait_for_commit_to_build(repo, top_commit)
-
     if status:
         print("Build succeeded! url: ", url)
         beep(True)
@@ -282,7 +327,5 @@ def main():
         print("Build failed. url: ", url)
         beep(False)
 
-    RunCommand("beep.sh")
-
-
-main()
+if __name__ == '__main__':
+    main()
