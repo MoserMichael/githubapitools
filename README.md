@@ -30,3 +30,36 @@ This program assumes that the environment GITHUB_TOKEN is exported, and that it 
 This program assumes the github api to be installed - pip install python-github-api
 ```
 
+this is what we get when running it on my humble efforts here ;-)
+
+```
+name: duckduckbang stars:  20
+name: jq-illustrated stars:  20
+name: kind-helper stars:  18
+name: cppcombinator stars:  16
+name: cstuff stars:  11
+name: s9k stars:  11
+name: pythonimportplayground stars:  5
+name: myenv stars:  4
+name: pygamewrap stars:  3
+name: pythoncourse stars:  2
+name: roget-thesaurus-parser stars:  2
+name: gitblame stars:  1
+name: k8explain stars:  1
+name: opinionated-fortune-cow stars:  1
+name: pprintex stars:  1
+name: bloxroutehomework stars:  0
+name: follow-kube-logs stars:  0
+name: githubapitools stars:  0
+name: github_pr_comments stars:  0
+name: grpc-spring-boot-starter-utils stars:  0
+name: ls-annotations stars:  0
+name: microsofthomework stars:  0
+name: my-notes stars:  0
+name: scriptrunner-operator stars:  0
+name: visual-python-strace stars:  0
+name: zipit stars:  0
+***
+total stars:  116
+```
+
