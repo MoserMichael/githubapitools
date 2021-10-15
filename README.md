@@ -9,10 +9,24 @@ help text for makepr.py
 ```
 usage: makepr.py [-h] [--new-pr] [--update-pr] [--wait] [--verbose]
 
-This program does the following steps: - creates a feature branch, and pushes the branch. (alternatively update the existing feature ranch) - opens a pull request, it is assumed that a
-continuous integration build is then triggered. - the program then waits that the continuous integration build for that pull request has completed. - At the end of the build, a sound is
-played, and the url with the build log is written to standard output. This program allows you to do some sword fighting, while the PR build is going on ;-( This program assumes that the
-environment GITHUB_TOKEN is exported, and that it has the token of the current user. This program assumes the github api to be installed - pip install python-github-api
+This program does the following steps for the --new-pr option: 1. Creates a
+feature branch, and pushes the branch. (alternatively update the existing
+feature ranch) 2. Opens a pull request, it is assumed that a continuous
+integration build is then triggered. 3. The program then waits that the
+continuous integration build for that pull request has completed. 4. At the
+end of the build, a sound is played, and the url with the build log is written
+to standard output. for the --update-pr option: 1. Wush the current state of
+local branch to feature banch 2. The program then waits that the continuous
+integration build for the top commit has completed. 3. At the end of the
+build, a sound is played, and the url with the build log is written to
+standard output. for the --wait option: 2. The program then waits that the
+continuous integration build for the top commit has completed. 3. At the end
+of the build, a sound is played, and the url with the build log is written to
+standard output. This program allows you to do some sword fighting, while the
+continuous integration build is going on ;-( This program assumes that the
+environment GITHUB_TOKEN is exported, and that it has the token of the current
+user. This program assumes the github api to be installed - pip install
+python-github-api
 
 optional arguments:
   -h, --help       show this help message and exit
@@ -20,7 +34,8 @@ optional arguments:
 push a pr and wait for continuous integration build to complete:
   --new-pr, -n     create new pull request (default: False)
   --update-pr, -u  update and push to existing pull request (default: False)
-  --wait, -w       wait for ongoing build of top commit to complete (default: False)
+  --wait, -w       wait for ongoing build of top commit to complete (default:
+                   False)
   --verbose, -v    trace all commands, verbose output (default: False)
 ```
 
