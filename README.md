@@ -24,16 +24,20 @@ for the --wait option:
     2. The program waits that the continuous integration build for the top commit has completed.
     3. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
+Note that ou need to set the organization (-o option) in the case of a private repository.
+
 This program allows you to do some sword fighting, while the continuous integration build is going on ;-(
 
 This program assumes that the environment GITHUB_TOKEN is exported, and that it has the token of the current user.
 This program assumes the github api to be installed - pip install python-github-api
 
-  --new-pr, -n     create new pull request (default: False)
-  --update-pr, -u  update and push to existing pull request (default: False)
-  --wait, -w       wait for ongoing build of top commit to complete (default:
-                   False)
-  --verbose, -v    trace all commands, verbose output (default: False)
+
+Push or update a pull request and wait for the continuous integration build to complete:
+  --new-pr, -n       create new pull request (default: False)
+  --update-pr, -u    update and push to existing pull request (default: False)
+  --wait, -w         wait for ongoing build of top commit to complete (default: False)
+  --org ORG, -o ORG  specify organization used to lookup the repository (default: )
+  --verbose, -v      trace all commands, verbose output (default: False)
 ```
 
 help text for starcounter.py

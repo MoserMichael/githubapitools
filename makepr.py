@@ -261,6 +261,8 @@ for the --wait option:
     2. The program waits that the continuous integration build for the top commit has completed.
     3. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
+Note that ou need to set the organization (-o option) in the case of a private repository.
+
 This program allows you to do some sword fighting, while the continuous integration build is going on ;-(
 
 This program assumes that the environment GITHUB_TOKEN is exported, and that it has the token of the current user.
@@ -270,7 +272,7 @@ This program assumes the github api to be installed - pip install python-github-
     parse = argparse.ArgumentParser(description=usage, \
                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    group = parse.add_argument_group("push a pr and wait for continuous integration build to complete")
+    group = parse.add_argument_group("Push or update a pull request and wait for the continuous integration build to complete")
 
     group.add_argument('--new-pr', '-n',  default=False, \
             action='store_true', dest='new_pr', help='create new pull request')
@@ -282,7 +284,7 @@ This program assumes the github api to be installed - pip install python-github-
             action='store_true', dest='wait', help='wait for ongoing build of top commit to complete')
 
     group.add_argument('--org', '-o',  default='', \
-            type='str', dest='org', help='specify organization used to lookup the repository')
+            type=str, dest='org', help='specify organization used to lookup the repository')
 
 
     group.add_argument('--verbose', '-v',  default=False, \
