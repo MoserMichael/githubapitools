@@ -281,6 +281,10 @@ This program assumes the github api to be installed - pip install python-github-
     group.add_argument('--wait', '-w',  default=False, \
             action='store_true', dest='wait', help='wait for ongoing build of top commit to complete')
 
+    group.add_argument('--org', '-o',  default='', \
+            type='str', dest='org', help='specify organization used to lookup the repository')
+
+
     group.add_argument('--verbose', '-v',  default=False, \
             action='store_true', dest='verbose', help='trace all commands, verbose output')
 
@@ -316,8 +320,12 @@ def main():
     user_name = github.get_user().login
     print("github user-name:", user_name)
 
-    org = github.get_organization("traiana")
-    repo = org.get_repo(repo_name)
+    if cmd_args.org != '':
+        org = github.get_organization(cmd_args.org)
+        repo = org.get_repo(repo_name)
+    else:
+        repo = github.get_user().get_repo(repo_name)
+
 
     if cmd_args.new_pr:
         create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, last_commit_body)
