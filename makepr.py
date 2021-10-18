@@ -263,10 +263,11 @@ for the --wait option:
 
 Note that ou need to set the organization (-o option) in the case of a private repository.
 
-This program allows you to do some sword fighting, while the continuous integration build is going on ;-(
+This program assumes that the environment GITHUB_TOKEN is exported (github access token of the current user)
+Requires the following pip packages: PyGithub websocket-client
 
-This program assumes that the environment GITHUB_TOKEN is exported, and that it has the token of the current user.
-This program assumes the github api to be installed - pip install python-github-api
+This program allows you to do some sword fighting, while the continuous integration build is going on ;-)
+
 
 '''
     parse = argparse.ArgumentParser(description=usage, \
