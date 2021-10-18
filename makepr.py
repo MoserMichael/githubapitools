@@ -261,7 +261,7 @@ for the --wait option:
     2. The program waits that the continuous integration build for the top commit has completed.
     3. At the end of the build, a sound is played, and the url with the build log is written to standard output.
 
-Note that you need to set the organization (-o option) in the case of a private repository.
+Note that ou need to set the organization (-o option) in the case of a private repository.
 
 This program allows you to do some sword fighting, while the continuous integration build is going on ;-(
 
@@ -287,7 +287,10 @@ This program assumes the github api to be installed - pip install python-github-
             type=str, dest='org', help='specify organization used to lookup the repository')
 
     group.add_argument('--showlog', '-s',  default=False, \
-            action='store_true', dest='showlog', help='show the build log in a browser window')
+            action='store_true', dest='showlog', help='show the build log in a bew browser')
+
+    group.add_argument('--dumplog', '-d',  default='', \
+            type=str, dest='dumplog', help='dump the build log in json format to file name')
 
     group.add_argument('--verbose', '-v',  default=False, \
             action='store_true', dest='verbose', help='trace all commands, verbose output')
@@ -305,44 +308,54 @@ def push_state_to_branch(remote_branch_name):
         print("Error: can't push  local changes. ", cmd.make_error_message())
         sys.exit(1)
 
+
 def show_build_log(url):
     # show it in a web browser.
     # can't get the data through websockets via api call: the page may need non trivial authentication, for private repos.
     import webbrowser
     webbrowser.open(url)
 
-##   keep getting 200 ok instead of 101 upgrade for private repos...
-#    ws_url = url.replace("https://", "wss://")
-#    print("ws_url:", ws_url)
-#
-#    import websocket
-#    import ssl
-#
-#    websocket.enableTrace(True)
-#    ws = websocket.create_connection(ws_url,
-#            sslopt={
-#                "cert_reqs": ssl.CERT_NONE,
-#                "check_hostname": False
-#                },
-#            header = [ "Sec-Fetch-Dest: websocket",
-#                       "Sec-Fetch-Mode: websocket",
-#                       "Sec-Fetch-Site: same-origin" ,
-#                       "Sec-WebSocket-Key: 7Ygmm93Vo8zp+fhpcmUEMg==",
-#                       "Sec-WebSocket-Extensions: permessage-deflate",
-#                       "Connection: keep-alive, Upgrade",
-#                       "Cache-Control: no-cache",
-#                       "Pragma: no-cache",
-#                       "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:93.0) Gecko/20100101 Firefox/93.0",
-#                       "Accept: */*",
-#                       "Accept-Language: en-US,en;q=0.5",
-#                       "Accept-Encoding: gzip, deflate, br" ])
-#
-#
-#    ws.send("Hello, World")
-#    result = ws.recv()
-#    print("Received '%s' type:  %s" % (result, str(type(result))) )
-#    ws.close()
-#
+
+def dump_build_log(url,filename):
+
+    with open(filename,"w") as out_file:
+        ws_url = url.replace("https://", "wss://") 
+        ws_url += "/ws"
+        print("ws_url:", ws_url)
+
+        import websocket
+        import ssl
+
+        # shows exchanged headers.
+        if RunCommand.trace_on:
+            websocket.enableTrace(True)
+
+        ws = websocket.create_connection(ws_url,
+                sslopt={
+                    "cert_reqs": ssl.CERT_NONE,
+                    "check_hostname": False
+                    },
+                header = [ "Sec-Fetch-Dest: websocket",
+                           "Sec-Fetch-Mode: websocket",
+                           "Sec-Fetch-Site: same-origin" ,
+                           "Sec-WebSocket-Key: 7Ygmm93Vo8zp+fhpcmUEMg==",
+                           "Connection: keep-alive, Upgrade",
+                           "Cache-Control: no-cache",
+                           "Pragma: no-cache",
+                           "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:93.0) Gecko/20100101 Firefox/93.0",
+                           "Accept: */*",
+                           "Accept-Language: en-US,en;q=0.5",
+                           "Accept-Encoding: gzip, deflate, br" ])
+
+
+        ws.send("Hello world!")
+        result = ws.recv()
+        if RunCommand.trace_on:
+            print("Received '%s' type:  %s" % (result, str(type(result))) )
+        ws.close()
+
+        out_file.write(result)
+
 #    import ssl
 #
 #    # non verifying ssl context (https://stackoverflow.com/questions/30461969/disable-default-certificate-verification-in-python-2-7-9)
@@ -407,6 +420,9 @@ def main():
 
     if cmd_args.showlog:
         show_build_log(url)
+
+    if cmd_args.dumplog != "":
+        dump_build_log(url, cmd_args.dumplog)
 
 if __name__ == '__main__':
     main()
