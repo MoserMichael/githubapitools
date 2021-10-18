@@ -84,4 +84,9 @@ name: zipit stars:  0
 ***
 total stars:  116
 ```
+# Installation
 
+You need to install the following packages:
+
+```pip3 install PyGithub```
+```pip install websocket-client```
