@@ -89,4 +89,9 @@ total stars:  116
 You need to install the following packages:
 
 ```pip3 install PyGithub```
-```pip install websocket-client```
+```pip install websocket-client``` 
+
+or install via requirements.txt file
+
+```pip3 install -r requirements.txt```
+
