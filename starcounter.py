@@ -166,7 +166,7 @@ This program assumes the github api to be installed - pip install python-github-
             action='store_true', dest='show_views', help='show views')
 
     group.add_argument('--stats-time', '-t',  default='week', \
-            type=str, dest='stat_time', help='period of examined view stats (for --show-views)')
+            type=str, dest='stat_time', help='time resulution of views (for --show-views)')
 
 
     return parse.parse_args(), parse
