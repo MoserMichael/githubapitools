@@ -123,7 +123,7 @@ class RepoTraffic:
             print("\t", view.timestamp, "total:", view.count, "unique:", view.uniques)
 
 
-def show_repo_traffic(user):
+def show_repo_traffic(user,stat_time):
 
     print("""
 Traffic report
@@ -132,7 +132,7 @@ Traffic report
     entries=[]
     for repo in user.get_repos():
         traffic = repo.get_views_traffic()
-        traffic_stats = repo.get_views_traffic(per='week')
+        traffic_stats = repo.get_views_traffic(per=stat_time) # default: per week
 
         traffic = RepoTraffic(repo.name, traffic_stats)
         entries.append(traffic)
@@ -165,6 +165,10 @@ This program assumes the github api to be installed - pip install python-github-
     group.add_argument('--show-views', '-v',  default=False, \
             action='store_true', dest='show_views', help='show views')
 
+    group.add_argument('--stats-time', '-t',  default='week', \
+            type=str, dest='stat_time', help='period of examined view stats (for --show-views)')
+
+
     return parse.parse_args(), parse
 
 
@@ -177,5 +181,5 @@ def main():
     if cmd_args.show_stars:
         show_repo_stars(user)
     if cmd_args.show_views:
-        show_repo_traffic(user)
+        show_repo_traffic(user, cmd_args.stat_time)
 main()

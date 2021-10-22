@@ -60,6 +60,9 @@ optional arguments:
 view github data on current users repositories:
   --show-stars, -s  show stars (default: True)
   --show-views, -v  show views (default: False)
+  --stats-time STAT_TIME, -t STAT_TIME
+                        period of examined view stats (for --show-views)
+                        (default: week)
 ```
 
 this is what we get when running it on my humble efforts here ;-)
