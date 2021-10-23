@@ -37,14 +37,14 @@ def show_diff_old_new(entries, old_data):
 
     old_entries = old_data.entries
     for entry in entries:
-        shown_entry = True
+        entry_present = False
         for old_entry in old_entries:
             if entry.name == old_entry.name:
+                entry_present = True
                 if entry.stars != old_entry.stars:
                     print(entry.name, "stars changed from:", old_entry.stars, "to:", entry.stars)
-                    shown_entry = False
                     break
-        if not shown_entry:
+        if not entry_present:
             print(entry.name, "new project. stars:", entry.stars)
 
 
