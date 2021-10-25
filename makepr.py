@@ -118,6 +118,44 @@ class RunCommand:
             return_value += " " + self.error_out
         return return_value
 
+def is_remote_ahead(remote_origin_url, branch_name, local_branch_top_commit):
+    cmd = RunCommand()
+
+    if cmd.run("git ls-remote --heads " + remote_origin_url) != 0:
+        print("Error: can't list remote heads", cmd.make_error_message())
+        sys.exit(1)
+
+    remote_head_commit = None
+    for line in cmd.output.split("\n"):
+        if line != "":
+            columns = line.split('\t')
+            if columns[1] == "refs/heads/" + branch_name:
+                remote_head_commit = columns[0]
+
+    if remote_head_commit is None:
+        print("Error: can't get remote head from: ", cmd.output)
+        sys.exit(1)
+
+    print("local branch top: ",  local_branch_top_commit, "remote branch top:", remote_head_commit)
+
+    if local_branch_top_commit == remote_head_commit:
+        print("local and remote branches are in sync.")
+        return 0
+
+    # check if local branch is ahead; it is if the remote top is contained in the local branch
+    cmd.run("git branch --contains " + remote_head_commit)
+
+    for line in cmd.output.split("\n"):
+        line = line[2:]
+        if line == branch_name:
+            print("local branch is ahead of remote branch")
+            return 1
+
+    print("Error: local and remote branch have diverged. remote top: ", remote_head_commit, " is not contained in local branch ", branch_name)
+    sys.exit(1)
+
+
+
 def init():
     cmd = RunCommand()
 
@@ -175,7 +213,7 @@ def init():
             "remote_branch_name: ", remote_branch_name, \
             "last-commit-comment:", last_commit_sha_and_comment, \
             "last-commit-body: ", last_commit_body)
-    return top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body
+    return top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body, remote_origin
 
 
 def wait_for_commit_to_build(repo, commit):
@@ -320,7 +358,7 @@ def show_build_log(url):
 def dump_build_log(url,filename):
 
     with open(filename,"w") as out_file:
-        ws_url = url.replace("https://", "wss://") 
+        ws_url = url.replace("https://", "wss://")
         ws_url += "/ws"
         print("ws_url:", ws_url)
 
@@ -331,7 +369,7 @@ def dump_build_log(url,filename):
         if RunCommand.trace_on:
             websocket.enableTrace(True)
 
-        ws = websocket.create_connection(ws_url,
+        web_socket = websocket.create_connection(ws_url,
                 sslopt={
                     "cert_reqs": ssl.CERT_NONE,
                     "check_hostname": False
@@ -349,11 +387,11 @@ def dump_build_log(url,filename):
                            "Accept-Encoding: gzip, deflate, br" ])
 
 
-        ws.send("Hello world!")
-        result = ws.recv()
+        web_socket.send("Hello world!")
+        result = web_socket.recv()
         if RunCommand.trace_on:
             print("Received '%s' type:  %s" % (result, str(type(result))) )
-        ws.close()
+        web_socket.close()
 
         out_file.write(result)
 
@@ -382,7 +420,12 @@ def main():
     if cmd_args.verbose:
         RunCommand.trace_on = True
 
-    top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body = init()
+    top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body, remote_origin_url = init()
+
+    status = is_remote_ahead(remote_origin_url, local_branch_name, top_commit)
+    if (cmd_args.new_pr or cmd_args.update_pr) and status == 0:
+        print("Error: Can't update remote, both local and remote are in sync")
+        sys.exit(1)
 
     if not "GITHUB_TOKEN" in os.environ:
         print("Error: GITHUB_TOKEN is no exported.")
