@@ -16,7 +16,10 @@ from github import Github
 
 
 def windows_command(command):
-    ctypes.windll.winmm.mciSendStringW(command, ctypes.create_unicode_buffer(600), 559, 0)
+    ctypes.windll.winmm.mciSendStringW(
+        command, ctypes.create_unicode_buffer(600), 559, 0
+    )
+
 
 def play(file_name):
     os_name = system()
@@ -26,24 +29,28 @@ def play(file_name):
         windows_command("play " + file_name + " wait")
         windows_command("close " + file_name)
     else:
-        cmd = ''
+        cmd = ""
         if os_name == "Darwin":
-            cmd = "exec afplay \"" + file_name + "\""
+            cmd = 'exec afplay "' + file_name + '"'
         elif os_name == "Linux":
             cmd = "exec aplay --quiet " + file_name
         else:
-            print("can't play sound on ",os_name)
+            print("can't play sound on ", os_name)
             return
 
-        with subprocess.Popen(cmd, universal_newlines = True, shell = True, stdout = -1, stderr = -1) as proc:
+        with subprocess.Popen(
+            cmd, universal_newlines=True, shell=True, stdout=-1, stderr=-1
+        ) as proc:
             proc.communicate()
+
 
 def beep(success):
     if success:
-        data_file = Path(__file__).with_name('Blow.aiff')
+        data_file = Path(__file__).with_name("Blow.aiff")
     else:
-        data_file = Path(__file__).with_name('Basso.aiff')
+        data_file = Path(__file__).with_name("Basso.aiff")
     play(str(data_file))
+
 
 # *** eof copied ***
 
@@ -52,15 +59,15 @@ class RunCommand:
     trace_on = False
     exit_on_error = True
 
-#    @staticmethod
-#    def trace(on_off):
-#        RunCommand.trace_on = on_off
-#
-#    @staticmethod
-#    def exit_on_error(on_off):
-#        RunCommand.exit_on_error = on_off
-#
-    def __init__(self, command_line = None):
+    #    @staticmethod
+    #    def trace(on_off):
+    #        RunCommand.trace_on = on_off
+    #
+    #    @staticmethod
+    #    def exit_on_error(on_off):
+    #        RunCommand.exit_on_error = on_off
+    #
+    def __init__(self, command_line=None):
         self.command_line = command_line
         self.exit_code = 0
         if command_line is not None:
@@ -69,10 +76,13 @@ class RunCommand:
     def run(self, command_line):
         try:
             if RunCommand.trace_on:
-                print('>', command_line)
+                print(">", command_line)
 
-            with subprocess.Popen(shlex.split(command_line), \
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
+            with subprocess.Popen(
+                shlex.split(command_line),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ) as process:
 
                 self.command_line = command_line
 
@@ -82,7 +92,6 @@ class RunCommand:
 
                 self.output = output.decode("utf-8")
                 self.error_out = error_out.decode("utf-8")
-
 
                 self.exit_code = process.wait()
 
@@ -118,6 +127,7 @@ class RunCommand:
             return_value += " " + self.error_out
         return return_value
 
+
 def is_remote_ahead(remote_origin_url, branch_name, local_branch_top_commit):
     cmd = RunCommand()
 
@@ -128,7 +138,7 @@ def is_remote_ahead(remote_origin_url, branch_name, local_branch_top_commit):
     remote_head_commit = None
     for line in cmd.output.split("\n"):
         if line != "":
-            columns = line.split('\t')
+            columns = line.split("\t")
             if columns[1] == "refs/heads/" + branch_name:
                 remote_head_commit = columns[0]
 
@@ -136,7 +146,12 @@ def is_remote_ahead(remote_origin_url, branch_name, local_branch_top_commit):
         print("Error: can't get remote head from: ", cmd.output)
         sys.exit(1)
 
-    print("local branch top: ",  local_branch_top_commit, "remote branch top:", remote_head_commit)
+    print(
+        "local branch top: ",
+        local_branch_top_commit,
+        "remote branch top:",
+        remote_head_commit,
+    )
 
     if local_branch_top_commit == remote_head_commit:
         print("local and remote branches are in sync.")
@@ -151,41 +166,50 @@ def is_remote_ahead(remote_origin_url, branch_name, local_branch_top_commit):
             print("local branch is ahead of remote branch")
             return 1
 
-    print("Error: local and remote branch have diverged. remote top: ", remote_head_commit, " is not contained in local branch ", branch_name)
+    print(
+        "Error: local and remote branch have diverged. remote top: ",
+        remote_head_commit,
+        " is not contained in local branch ",
+        branch_name,
+    )
     sys.exit(1)
-
 
 
 def init():
     cmd = RunCommand()
 
-    if cmd.run("git rev-parse --show-toplevel" ) != 0:
+    if cmd.run("git rev-parse --show-toplevel") != 0:
         print("Error: current directory not part of git tree")
         sys.exit(1)
 
     if cmd.run("git show -s --format=%H") != 0:
         print("Error: can't get top commit", cmd.make_error_message())
         sys.exit(1)
-    top_commit = cmd.output.rstrip('\n')
+    top_commit = cmd.output.rstrip("\n")
 
-#    if cmd.run("git branch -r --contains " + top_commit)  == 0:
-#        print("Error: commit has already been pushed " + top_commit)
-#        sys.exit(1)
+    #    if cmd.run("git branch -r --contains " + top_commit)  == 0:
+    #        print("Error: commit has already been pushed " + top_commit)
+    #        sys.exit(1)
 
     if cmd.run("git rev-parse --abbrev-ref HEAD") != 0:
         print("Error: can't get current branch name", cmd.make_error_message())
         sys.exit(1)
-    local_branch_name = cmd.output.rstrip('\n')
+    local_branch_name = cmd.output.rstrip("\n")
 
-    if cmd.run('/bin/bash -c \'git status -b --porcelain=v2 | grep -m 1 "^# branch.upstream " | cut -d " " -f 3-\'') != 0:
+    if (
+        cmd.run(
+            '/bin/bash -c \'git status -b --porcelain=v2 | grep -m 1 "^# branch.upstream " | cut -d " " -f 3-\''
+        )
+        != 0
+    ):
         print("Error: can't get name of remote branch", cmd.make_error_message())
         sys.exit(1)
-    remote_branch_name = cmd.output.rstrip('\n')
+    remote_branch_name = cmd.output.rstrip("\n")
 
     if cmd.run("git show -s --format='%s %h'") != 0:
         print("Error: can't get last commit comment", cmd.make_error_message())
         sys.exit(1)
-    last_commit_sha_and_comment = cmd.output.rstrip('\n')
+    last_commit_sha_and_comment = cmd.output.rstrip("\n")
 
     if cmd.run("git show -s --format='%b'") != 0:
         print("Error: can't get body of last commit", cmd.make_error_message())
@@ -197,23 +221,44 @@ def init():
         sys.exit(1)
 
     remote_origin = cmd.output
-    pos_1 = remote_origin.rfind('/')
-    pos_2 = remote_origin.rfind('.')
+    pos_1 = remote_origin.rfind("/")
+    pos_2 = remote_origin.rfind(".")
     if pos_1 == -1 and pos_2 == -1:
         print("Error: can't get repository namefrom remote url: ", remote_origin)
 
-    repo_name = remote_origin[pos_1+1:pos_2]
+    repo_name = remote_origin[pos_1 + 1 : pos_2]
     if repo_name == "":
-        print("Error: can't get repository namefrom remote url: ", remote_origin, " ", cmd.make_error_message())
+        print(
+            "Error: can't get repository namefrom remote url: ",
+            remote_origin,
+            " ",
+            cmd.make_error_message(),
+        )
         sys.exit(1)
 
-    print("top_commit:", top_commit, \
-            "repo_name:", repo_name, \
-            "local_branch_name:", local_branch_name, \
-            "remote_branch_name: ", remote_branch_name, \
-            "last-commit-comment:", last_commit_sha_and_comment, \
-            "last-commit-body: ", last_commit_body)
-    return top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body, remote_origin
+    print(
+        "top_commit:",
+        top_commit,
+        "repo_name:",
+        repo_name,
+        "local_branch_name:",
+        local_branch_name,
+        "remote_branch_name: ",
+        remote_branch_name,
+        "last-commit-comment:",
+        last_commit_sha_and_comment,
+        "last-commit-body: ",
+        last_commit_body,
+    )
+    return (
+        top_commit,
+        repo_name,
+        local_branch_name,
+        remote_branch_name,
+        last_commit_sha_and_comment,
+        last_commit_body,
+        remote_origin,
+    )
 
 
 def wait_for_commit_to_build(repo, commit):
@@ -233,55 +278,88 @@ def wait_for_commit_to_build(repo, commit):
 
         for status in commit.get_statuses():
             if RunCommand.trace_on:
-                print( "created_at", status.created_at ,"creator:", status.creator,  " id:", status.id, "state:", status.state, "context:", status.context, "target_url:", status.target_url,  "url:", status.url, "description:", status.description )
+                print(
+                    "created_at",
+                    status.created_at,
+                    "creator:",
+                    status.creator,
+                    " id:",
+                    status.id,
+                    "state:",
+                    status.state,
+                    "context:",
+                    status.context,
+                    "target_url:",
+                    status.target_url,
+                    "url:",
+                    status.url,
+                    "description:",
+                    status.description,
+                )
 
             if status.context == "build":
                 if status.state == "success":
-                    return  True, status.target_url
+                    return True, status.target_url
                 if status.state == "failure":
-                    return  False, status.target_url
+                    return False, status.target_url
 
         time.sleep(5)
 
-def create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, last_commit_body):
+
+def create_branch_and_pr(
+    repo, local_branch_name, last_commit_sha_and_comment, last_commit_body
+):
 
     local_br_name = last_commit_sha_and_comment
-    local_br_name = re.sub(r"[^a-zA-Z0-9\ ]+",'', local_br_name)
-    local_br_name = re.sub(r"\s+", '-', local_br_name)
+    local_br_name = re.sub(r"[^a-zA-Z0-9\ ]+", "", local_br_name)
+    local_br_name = re.sub(r"\s+", "-", local_br_name)
 
     cmd = RunCommand()
 
     print("local_br_name; ", local_br_name)
 
-    #if cmd.run("git checkout -b " + local_br_name) != 0:
+    # if cmd.run("git checkout -b " + local_br_name) != 0:
     if cmd.run("git branch -m " + local_br_name) != 0:
         print("Error: can't rename branch to  branch_name", cmd.make_error_message())
         sys.exit(1)
 
-    if cmd.run("git push --set-upstream origin " + local_br_name + ":feature/" + local_br_name) != 0:
-        print("Error: can't push to feature/" + local_br_name, " ", cmd.make_error_message())
+    if (
+        cmd.run(
+            "git push --set-upstream origin "
+            + local_br_name
+            + ":feature/"
+            + local_br_name
+        )
+        != 0
+    ):
+        print(
+            "Error: can't push to feature/" + local_br_name,
+            " ",
+            cmd.make_error_message(),
+        )
         sys.exit(1)
 
     base_name = "feature/" + local_br_name
-    #head_name = "remotes/origin/" + local_branch_name
+    # head_name = "remotes/origin/" + local_branch_name
     head_name = local_branch_name
     print("create_pull_request base:", head_name, "head:", base_name)
 
     # doc for create_repo:  https://docs.github.com/en/rest/reference/pulls#create-a-pull-request
 
     pull_request = repo.create_pull(
-            title=last_commit_sha_and_comment,
-            body=last_commit_body,
-            base=head_name,
-            head=base_name,
-            maintainer_can_modify=True
-            )
+        title=last_commit_sha_and_comment,
+        body=last_commit_body,
+        base=head_name,
+        head=base_name,
+        maintainer_can_modify=True,
+    )
 
     print("pull request created: ", pull_request)
 
+
 def parse_cmd_line():
 
-    usage = '''
+    usage = """
 This program does the following steps; it assumes that the current directory is in a git tree.
 
 for the --new-pr option:
@@ -307,39 +385,87 @@ Requires the following pip packages: PyGithub websocket-client
 This program allows you to do some sword fighting, while the continuous integration build is going on ;-)
 
 
-'''
-    parse = argparse.ArgumentParser(description=usage, \
-                formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+"""
+    parse = argparse.ArgumentParser(
+        description=usage, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
 
-    group = parse.add_argument_group("Push or update a pull request and wait for the continuous integration build to complete")
+    group = parse.add_argument_group(
+        "Push or update a pull request and wait for the continuous integration build to complete"
+    )
 
-    group.add_argument('--new-pr', '-n',  default=False, \
-            action='store_true', dest='new_pr', help='create new pull request')
+    group.add_argument(
+        "--new-pr",
+        "-n",
+        default=False,
+        action="store_true",
+        dest="new_pr",
+        help="create new pull request",
+    )
 
-    group.add_argument('--update-pr', '-u',  default=False, \
-            action='store_true', dest='update_pr', help='update and push to existing pull request')
+    group.add_argument(
+        "--update-pr",
+        "-u",
+        default=False,
+        action="store_true",
+        dest="update_pr",
+        help="update and push to existing pull request",
+    )
 
-    group.add_argument('--wait', '-w',  default=False, \
-            action='store_true', dest='wait', help='wait for ongoing build of top commit to complete')
+    group.add_argument(
+        "--wait",
+        "-w",
+        default=False,
+        action="store_true",
+        dest="wait",
+        help="wait for ongoing build of top commit to complete",
+    )
 
-    group.add_argument('--org', '-o',  default='', \
-            type=str, dest='org', help='specify organization used to lookup the repository')
+    group.add_argument(
+        "--org",
+        "-o",
+        default="",
+        type=str,
+        dest="org",
+        help="specify organization used to lookup the repository",
+    )
 
-    group.add_argument('--showlog', '-s',  default=False, \
-            action='store_true', dest='showlog', help='show the build log in a bew browser')
+    group.add_argument(
+        "--showlog",
+        "-s",
+        default=False,
+        action="store_true",
+        dest="showlog",
+        help="show the build log in a bew browser",
+    )
 
-    group.add_argument('--dumplog', '-d',  default='', \
-            type=str, dest='dumplog', help='dump the build log in json format to file name')
+    group.add_argument(
+        "--dumplog",
+        "-d",
+        default="",
+        type=str,
+        dest="dumplog",
+        help="dump the build log in json format to file name",
+    )
 
-    group.add_argument('--verbose', '-v',  default=False, \
-            action='store_true', dest='verbose', help='trace all commands, verbose output')
-
+    group.add_argument(
+        "--verbose",
+        "-v",
+        default=False,
+        action="store_true",
+        dest="verbose",
+        help="trace all commands, verbose output",
+    )
 
     return parse.parse_args(), parse
 
+
 def push_state_to_branch(remote_branch_name):
     if not remote_branch_name.startswith("origin/feature/"):
-        print("Error. Remote origin does not start with 'origin/feature', curent remote branch name is:", remote_branch_name)
+        print(
+            "Error. Remote origin does not start with 'origin/feature', curent remote branch name is:",
+            remote_branch_name,
+        )
         sys.exit(1)
 
     cmd = RunCommand()
@@ -352,12 +478,13 @@ def show_build_log(url):
     # show it in a web browser.
     # can't get the data through websockets via api call: the page may need non trivial authentication, for private repos.
     import webbrowser
+
     webbrowser.open(url)
 
 
-def dump_build_log(url,filename):
+def dump_build_log(url, filename):
 
-    with open(filename,"w") as out_file:
+    with open(filename, "w") as out_file:
         ws_url = url.replace("https://", "wss://")
         ws_url += "/ws"
         print("ws_url:", ws_url)
@@ -369,31 +496,32 @@ def dump_build_log(url,filename):
         if RunCommand.trace_on:
             websocket.enableTrace(True)
 
-        web_socket = websocket.create_connection(ws_url,
-                sslopt={
-                    "cert_reqs": ssl.CERT_NONE,
-                    "check_hostname": False
-                    },
-                header = [ "Sec-Fetch-Dest: websocket",
-                           "Sec-Fetch-Mode: websocket",
-                           "Sec-Fetch-Site: same-origin" ,
-                           "Sec-WebSocket-Key: 7Ygmm93Vo8zp+fhpcmUEMg==",
-                           "Connection: keep-alive, Upgrade",
-                           "Cache-Control: no-cache",
-                           "Pragma: no-cache",
-                           "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:93.0) Gecko/20100101 Firefox/93.0",
-                           "Accept: */*",
-                           "Accept-Language: en-US,en;q=0.5",
-                           "Accept-Encoding: gzip, deflate, br" ])
-
+        web_socket = websocket.create_connection(
+            ws_url,
+            sslopt={"cert_reqs": ssl.CERT_NONE, "check_hostname": False},
+            header=[
+                "Sec-Fetch-Dest: websocket",
+                "Sec-Fetch-Mode: websocket",
+                "Sec-Fetch-Site: same-origin",
+                "Sec-WebSocket-Key: 7Ygmm93Vo8zp+fhpcmUEMg==",
+                "Connection: keep-alive, Upgrade",
+                "Cache-Control: no-cache",
+                "Pragma: no-cache",
+                "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:93.0) Gecko/20100101 Firefox/93.0",
+                "Accept: */*",
+                "Accept-Language: en-US,en;q=0.5",
+                "Accept-Encoding: gzip, deflate, br",
+            ],
+        )
 
         web_socket.send("Hello world!")
         result = web_socket.recv()
         if RunCommand.trace_on:
-            print("Received '%s' type:  %s" % (result, str(type(result))) )
+            print("Received '%s' type:  %s" % (result, str(type(result))))
         web_socket.close()
 
         out_file.write(result)
+
 
 #    import ssl
 #
@@ -420,7 +548,15 @@ def main():
     if cmd_args.verbose:
         RunCommand.trace_on = True
 
-    top_commit, repo_name, local_branch_name, remote_branch_name, last_commit_sha_and_comment, last_commit_body, remote_origin_url = init()
+    (
+        top_commit,
+        repo_name,
+        local_branch_name,
+        remote_branch_name,
+        last_commit_sha_and_comment,
+        last_commit_body,
+        remote_origin_url,
+    ) = init()
 
     status = is_remote_ahead(remote_origin_url, local_branch_name, top_commit)
     if (cmd_args.new_pr or cmd_args.update_pr) and status == 0:
@@ -431,21 +567,22 @@ def main():
         print("Error: GITHUB_TOKEN is no exported.")
         sys.exit(1)
 
-    token = os.environ['GITHUB_TOKEN']
+    token = os.environ["GITHUB_TOKEN"]
     github = Github(login_or_token="access_token", password=token)
 
     user_name = github.get_user().login
     print("github user-name:", user_name)
 
-    if cmd_args.org != '':
+    if cmd_args.org != "":
         org = github.get_organization(cmd_args.org)
         repo = org.get_repo(repo_name)
     else:
         repo = github.get_user().get_repo(repo_name)
 
-
     if cmd_args.new_pr:
-        create_branch_and_pr(repo, local_branch_name, last_commit_sha_and_comment, last_commit_body)
+        create_branch_and_pr(
+            repo, local_branch_name, last_commit_sha_and_comment, last_commit_body
+        )
     elif cmd_args.update_pr:
         push_state_to_branch(remote_branch_name)
     elif cmd_args.wait:
@@ -468,5 +605,6 @@ def main():
     if cmd_args.dumplog != "":
         dump_build_log(url, cmd_args.dumplog)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
