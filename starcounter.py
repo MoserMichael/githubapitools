@@ -136,6 +136,7 @@ class RepoTraffic:
         )
         for view in self.all_stats:
             print("\t", view.timestamp, "total:", view.count, "unique:", view.uniques)
+        return self.views_total
 
 
 def show_repo_traffic(user, stat_time):
@@ -159,8 +160,10 @@ Traffic report
 
     entries.sort(key=by_stars, reverse=True)
 
+    views_total = 0
     for entry in entries:
-        entry.show()
+        views_total += entry.show()
+    print("\n***\nTotal views:", views_total)
 
 
 def parse_cmd_line():
@@ -216,6 +219,7 @@ def main():
     user = github.get_user()
     if cmd_args.show_stars:
         show_repo_stars(user)
+
     if cmd_args.show_views:
         show_repo_traffic(user, cmd_args.stat_time)
 
