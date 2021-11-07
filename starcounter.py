@@ -119,11 +119,12 @@ def show_repo_stars(user):
 
 
 class RepoTraffic:
-    def __init__(self, name, traffic_stats):
+    def __init__(self, name, traffic_stats, referrers):
         self.name = name
         self.views_total = int(traffic_stats["count"])
         self.views_unique = int(traffic_stats["uniques"])
         self.all_stats = traffic_stats["views"]
+        self.referrers = referrers
 
     def show(self):
         print(
@@ -134,8 +135,17 @@ class RepoTraffic:
             "unique: ",
             self.views_unique,
         )
-        for view in self.all_stats:
-            print("\t", view.timestamp, "total:", view.count, "unique:", view.uniques)
+        if len(self.all_stats) != 0:
+            print("Views:")
+            for view in self.all_stats:
+                print("\t", view.timestamp, "total:", view.count, "unique:", view.uniques)
+
+            if len(self.referrers) != 0:
+                print("\t Referrers:")
+                for referrer in self.referrers:
+                    print(f"\t\tCount: {referrer.count} Unique: {referrer.uniques} Url: {referrer.referrer}")
+
+        print("")
         return self.views_total
 
 
@@ -151,8 +161,9 @@ Traffic report
     for repo in user.get_repos():
         traffic = repo.get_views_traffic()
         traffic_stats = repo.get_views_traffic(per=stat_time)  # default: per week
-
-        traffic = RepoTraffic(repo.name, traffic_stats)
+        referrers = repo.get_top_referrers()
+#
+        traffic = RepoTraffic(repo.name, traffic_stats, referrers)
         entries.append(traffic)
 
     def by_stars(ent):

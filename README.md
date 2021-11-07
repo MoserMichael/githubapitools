@@ -64,15 +64,16 @@ view github data on current users repositories:
                         time resulution of views (for --show-views) (default: week)
 ```
 
-this is what we get when running it on my humble efforts here ;-)
+Also it gives you some visitor statistics, without having to use the google analytics spyware. (I am not using google analytics)
+This is what we get when running it on my humble efforts here ;-)
 
 ```
-name: duckduckbang stars:  20
+name: duckduckbang stars:  21
 name: jq-illustrated stars:  20
-name: kind-helper stars:  18
-name: cppcombinator stars:  16
+name: kind-helper stars:  20
+name: cppcombinator stars:  17
+name: s9k stars:  12
 name: cstuff stars:  11
-name: s9k stars:  11
 name: pythonimportplayground stars:  5
 name: myenv stars:  4
 name: pygamewrap stars:  3
@@ -83,94 +84,284 @@ name: k8explain stars:  1
 name: opinionated-fortune-cow stars:  1
 name: pprintex stars:  1
 name: bloxroutehomework stars:  0
+name: flagged-hn stars:  0
 name: follow-kube-logs stars:  0
 name: githubapitools stars:  0
 name: github_pr_comments stars:  0
 name: grpc-spring-boot-starter-utils stars:  0
+name: kwchecker stars:  0
 name: ls-annotations stars:  0
 name: microsofthomework stars:  0
 name: my-notes stars:  0
 name: printb stars:  0
 name: scriptrunner-operator stars:  0
+name: subb stars:  0
+name: vimcrypt stars:  0
+name: vimcrypt2 stars:  0
 name: visual-python-strace stars:  0
 name: zipit stars:  0
 ***
-total stars:  116
+total stars:  121
 
 Traffic report
 
-repo: gitblame views: total: 93 unique:  11
-	 2021-10-04 00:00:00 total: 50 unique: 5
-	 2021-10-11 00:00:00 total: 40 unique: 9
-	 2021-10-18 00:00:00 total: 3 unique: 2
-repo: githubapitools views: total: 41 unique:  5
-	 2021-10-11 00:00:00 total: 30 unique: 4
-	 2021-10-18 00:00:00 total: 11 unique: 3
-repo: pythonimportplayground views: total: 37 unique:  12
-	 2021-10-04 00:00:00 total: 24 unique: 5
-	 2021-10-11 00:00:00 total: 10 unique: 8
-	 2021-10-18 00:00:00 total: 3 unique: 1
-repo: pythoncourse views: total: 35 unique:  4
-	 2021-10-04 00:00:00 total: 16 unique: 2
-	 2021-10-11 00:00:00 total: 19 unique: 3
-repo: printb views: total: 28 unique:  5
-	 2021-10-11 00:00:00 total: 21 unique: 5
-	 2021-10-18 00:00:00 total: 7 unique: 2
-repo: my-notes views: total: 22 unique:  4
-	 2021-10-04 00:00:00 total: 11 unique: 2
-	 2021-10-11 00:00:00 total: 9 unique: 3
-	 2021-10-18 00:00:00 total: 2 unique: 1
-repo: ls-annotations views: total: 13 unique:  2
-	 2021-10-04 00:00:00 total: 2 unique: 1
-	 2021-10-11 00:00:00 total: 11 unique: 1
-repo: pygamewrap views: total: 13 unique:  6
-	 2021-10-04 00:00:00 total: 9 unique: 2
-	 2021-10-11 00:00:00 total: 4 unique: 4
-repo: cppcombinator views: total: 11 unique:  6
-	 2021-10-04 00:00:00 total: 2 unique: 2
-	 2021-10-11 00:00:00 total: 8 unique: 3
-	 2021-10-18 00:00:00 total: 1 unique: 1
-repo: jq-illustrated views: total: 8 unique:  1
-	 2021-10-18 00:00:00 total: 8 unique: 1
-repo: kind-helper views: total: 7 unique:  5
-	 2021-10-04 00:00:00 total: 4 unique: 2
-	 2021-10-11 00:00:00 total: 2 unique: 2
-	 2021-10-18 00:00:00 total: 1 unique: 1
-repo: s9k views: total: 7 unique:  3
-	 2021-10-04 00:00:00 total: 5 unique: 1
-	 2021-10-11 00:00:00 total: 2 unique: 2
-repo: zipit views: total: 7 unique:  6
-	 2021-10-04 00:00:00 total: 3 unique: 3
-	 2021-10-11 00:00:00 total: 3 unique: 2
-	 2021-10-18 00:00:00 total: 1 unique: 1
-repo: duckduckbang views: total: 6 unique:  5
-	 2021-10-04 00:00:00 total: 4 unique: 3
-	 2021-10-11 00:00:00 total: 2 unique: 2
-repo: github_pr_comments views: total: 6 unique:  2
-	 2021-10-11 00:00:00 total: 6 unique: 2
-repo: pprintex views: total: 4 unique:  2
-	 2021-10-04 00:00:00 total: 3 unique: 2
-	 2021-10-11 00:00:00 total: 1 unique: 1
-repo: cstuff views: total: 3 unique:  2
-	 2021-10-04 00:00:00 total: 1 unique: 1
-	 2021-10-11 00:00:00 total: 1 unique: 1
-	 2021-10-18 00:00:00 total: 1 unique: 1
-repo: follow-kube-logs views: total: 2 unique:  1
-	 2021-10-11 00:00:00 total: 2 unique: 1
-repo: bloxroutehomework views: total: 1 unique:  1
-	 2021-10-11 00:00:00 total: 1 unique: 1
-repo: grpc-spring-boot-starter-utils views: total: 1 unique:  1
-	 2021-10-04 00:00:00 total: 1 unique: 1
-repo: myenv views: total: 1 unique:  1
-	 2021-10-11 00:00:00 total: 1 unique: 1
-repo: opinionated-fortune-cow views: total: 1 unique:  1
-	 2021-10-04 00:00:00 total: 1 unique: 1
-repo: scriptrunner-operator views: total: 1 unique:  1
-	 2021-10-11 00:00:00 total: 1 unique: 1
+repo: vimcrypt2 views: total: 80 unique:  20
+Views:
+	 2021-10-30 00:00:00 total: 36 unique: 11
+	 2021-10-31 00:00:00 total: 12 unique: 4
+	 2021-11-01 00:00:00 total: 17 unique: 5
+	 2021-11-02 00:00:00 total: 1 unique: 1
+	 2021-11-03 00:00:00 total: 4 unique: 1
+	 2021-11-05 00:00:00 total: 5 unique: 2
+	 2021-11-06 00:00:00 total: 4 unique: 3
+	 2021-11-07 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 15 Unique: 2 Url: github.com
+		Count: 13 Unique: 6 Url: vim.org
+		Count: 1 Unique: 1 Url: DuckDuckGo
+
+repo: gitblame views: total: 66 unique:  20
+Views:
+	 2021-10-24 00:00:00 total: 24 unique: 5
+	 2021-10-25 00:00:00 total: 7 unique: 2
+	 2021-10-26 00:00:00 total: 8 unique: 4
+	 2021-10-27 00:00:00 total: 6 unique: 2
+	 2021-10-28 00:00:00 total: 7 unique: 3
+	 2021-10-29 00:00:00 total: 1 unique: 1
+	 2021-10-30 00:00:00 total: 2 unique: 1
+	 2021-10-31 00:00:00 total: 4 unique: 2
+	 2021-11-01 00:00:00 total: 1 unique: 1
+	 2021-11-03 00:00:00 total: 2 unique: 1
+	 2021-11-04 00:00:00 total: 2 unique: 2
+	 2021-11-05 00:00:00 total: 1 unique: 1
+	 2021-11-06 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 16 Unique: 10 Url: vim.org
+		Count: 3 Unique: 2 Url: github.com
+
+repo: subb views: total: 46 unique:  3
+Views:
+	 2021-11-01 00:00:00 total: 43 unique: 3
+	 2021-11-02 00:00:00 total: 1 unique: 1
+	 2021-11-05 00:00:00 total: 2 unique: 1
+	 Referrers:
+		Count: 20 Unique: 2 Url: github.com
+		Count: 6 Unique: 1 Url: pypi.org
+
+repo: flagged-hn views: total: 40 unique:  5
+Views:
+	 2021-11-04 00:00:00 total: 21 unique: 2
+	 2021-11-05 00:00:00 total: 16 unique: 5
+	 2021-11-07 00:00:00 total: 3 unique: 1
+	 Referrers:
+		Count: 18 Unique: 3 Url: news.ycombinator.com
+		Count: 11 Unique: 2 Url: github.com
+
+repo: vimcrypt views: total: 28 unique:  6
+Views:
+	 2021-10-29 00:00:00 total: 15 unique: 4
+	 2021-10-30 00:00:00 total: 3 unique: 2
+	 2021-10-31 00:00:00 total: 6 unique: 2
+	 2021-11-01 00:00:00 total: 2 unique: 1
+	 2021-11-06 00:00:00 total: 1 unique: 1
+	 2021-11-07 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 2 Unique: 1 Url: github.com
+
+repo: kind-helper views: total: 25 unique:  3
+Views:
+	 2021-10-25 00:00:00 total: 19 unique: 2
+	 2021-10-27 00:00:00 total: 4 unique: 1
+	 2021-11-05 00:00:00 total: 2 unique: 1
+	 Referrers:
+		Count: 10 Unique: 1 Url: hn.algolia.com
+		Count: 7 Unique: 2 Url: github.com
+
+repo: kwchecker views: total: 24 unique:  3
+Views:
+	 2021-11-03 00:00:00 total: 24 unique: 3
+	 Referrers:
+		Count: 13 Unique: 3 Url: github.com
+		Count: 3 Unique: 1 Url: pypi.org
+
+repo: my-notes views: total: 18 unique:  4
+Views:
+	 2021-10-25 00:00:00 total: 3 unique: 2
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-10-29 00:00:00 total: 2 unique: 1
+	 2021-11-03 00:00:00 total: 4 unique: 3
+	 2021-11-06 00:00:00 total: 8 unique: 2
+	 Referrers:
+		Count: 7 Unique: 3 Url: github.com
+
+repo: pygamewrap views: total: 18 unique:  5
+Views:
+	 2021-10-28 00:00:00 total: 2 unique: 1
+	 2021-10-31 00:00:00 total: 2 unique: 1
+	 2021-11-02 00:00:00 total: 10 unique: 1
+	 2021-11-03 00:00:00 total: 2 unique: 1
+	 2021-11-05 00:00:00 total: 1 unique: 1
+	 2021-11-06 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 3 Unique: 1 Url: github.com
+		Count: 1 Unique: 1 Url: reddit.com
+
+repo: githubapitools views: total: 17 unique:  7
+Views:
+	 2021-10-27 00:00:00 total: 2 unique: 1
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-10-31 00:00:00 total: 1 unique: 1
+	 2021-11-03 00:00:00 total: 10 unique: 5
+	 2021-11-04 00:00:00 total: 2 unique: 1
+	 2021-11-05 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 10 Unique: 6 Url: news.ycombinator.com
+		Count: 3 Unique: 2 Url: github.com
+
+repo: s9k views: total: 12 unique:  4
+Views:
+	 2021-10-25 00:00:00 total: 5 unique: 1
+	 2021-11-03 00:00:00 total: 1 unique: 1
+	 2021-11-04 00:00:00 total: 3 unique: 1
+	 2021-11-05 00:00:00 total: 1 unique: 1
+	 2021-11-06 00:00:00 total: 2 unique: 2
+	 Referrers:
+		Count: 5 Unique: 1 Url: github.com
+		Count: 3 Unique: 1 Url: Google
+
+repo: myenv views: total: 11 unique:  6
+Views:
+	 2021-10-24 00:00:00 total: 4 unique: 1
+	 2021-10-26 00:00:00 total: 1 unique: 1
+	 2021-10-28 00:00:00 total: 2 unique: 1
+	 2021-10-29 00:00:00 total: 2 unique: 1
+	 2021-11-05 00:00:00 total: 1 unique: 1
+	 2021-11-07 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 2 Unique: 2 Url: github.com
+
+repo: opinionated-fortune-cow views: total: 11 unique:  1
+Views:
+	 2021-10-24 00:00:00 total: 7 unique: 1
+	 2021-10-25 00:00:00 total: 3 unique: 1
+	 2021-10-29 00:00:00 total: 1 unique: 1
+
+repo: cppcombinator views: total: 10 unique:  9
+Views:
+	 2021-10-27 00:00:00 total: 1 unique: 1
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-10-29 00:00:00 total: 1 unique: 1
+	 2021-10-31 00:00:00 total: 1 unique: 1
+	 2021-11-01 00:00:00 total: 2 unique: 1
+	 2021-11-02 00:00:00 total: 1 unique: 1
+	 2021-11-03 00:00:00 total: 1 unique: 1
+	 2021-11-06 00:00:00 total: 1 unique: 1
+	 2021-11-07 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 5 Unique: 4 Url: github.com
+
+repo: cstuff views: total: 10 unique:  4
+Views:
+	 2021-10-27 00:00:00 total: 2 unique: 2
+	 2021-10-31 00:00:00 total: 7 unique: 1
+	 2021-11-04 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 1 Unique: 1 Url: github.com
+
+repo: printb views: total: 10 unique:  1
+Views:
+	 2021-10-25 00:00:00 total: 7 unique: 1
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-11-04 00:00:00 total: 2 unique: 1
+
+repo: zipit views: total: 8 unique:  6
+Views:
+	 2021-10-24 00:00:00 total: 3 unique: 1
+	 2021-10-28 00:00:00 total: 3 unique: 3
+	 2021-11-06 00:00:00 total: 2 unique: 2
+
+repo: roget-thesaurus-parser views: total: 7 unique:  1
+Views:
+	 2021-10-27 00:00:00 total: 7 unique: 1
+
+repo: pprintex views: total: 6 unique:  4
+Views:
+	 2021-10-27 00:00:00 total: 2 unique: 1
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-11-03 00:00:00 total: 2 unique: 1
+	 2021-11-05 00:00:00 total: 1 unique: 1
+
+repo: pythonimportplayground views: total: 6 unique:  3
+Views:
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 2021-10-31 00:00:00 total: 4 unique: 1
+	 2021-11-04 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 4 Unique: 1 Url: github.com
+		Count: 1 Unique: 1 Url: reddit.com
+
+repo: jq-illustrated views: total: 5 unique:  2
+Views:
+	 2021-10-30 00:00:00 total: 2 unique: 1
+	 2021-11-01 00:00:00 total: 2 unique: 1
+	 2021-11-04 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 3 Unique: 2 Url: github.com
+
+repo: ls-annotations views: total: 5 unique:  1
+Views:
+	 2021-10-25 00:00:00 total: 5 unique: 1
+	 Referrers:
+		Count: 2 Unique: 1 Url: Google
+
+repo: grpc-spring-boot-starter-utils views: total: 4 unique:  2
+Views:
+	 2021-10-25 00:00:00 total: 3 unique: 1
+	 2021-10-28 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 2 Unique: 1 Url: github.com
+
+repo: pythoncourse views: total: 4 unique:  1
+Views:
+	 2021-10-25 00:00:00 total: 4 unique: 1
+	 Referrers:
+		Count: 4 Unique: 1 Url: github.com
+
+repo: follow-kube-logs views: total: 3 unique:  1
+Views:
+	 2021-10-31 00:00:00 total: 3 unique: 1
+	 Referrers:
+		Count: 2 Unique: 1 Url: github.com
+
+repo: visual-python-strace views: total: 2 unique:  2
+Views:
+	 2021-11-06 00:00:00 total: 1 unique: 1
+	 2021-11-07 00:00:00 total: 1 unique: 1
+
+repo: duckduckbang views: total: 1 unique:  1
+Views:
+	 2021-10-31 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 1 Unique: 1 Url: DuckDuckGo
+
+repo: github_pr_comments views: total: 1 unique:  1
+Views:
+	 2021-11-01 00:00:00 total: 1 unique: 1
+	 Referrers:
+		Count: 1 Unique: 1 Url: github.com
+
+repo: bloxroutehomework views: total: 0 unique:  0
+
 repo: k8explain views: total: 0 unique:  0
+
 repo: microsofthomework views: total: 0 unique:  0
-repo: roget-thesaurus-parser views: total: 0 unique:  0
-repo: visual-python-strace views: total: 0 unique:  0
+
+repo: scriptrunner-operator views: total: 0 unique:  0
+
+
+***
+Total views: 478
+
 ```
 # Installation
 
