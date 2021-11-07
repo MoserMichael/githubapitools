@@ -3,6 +3,7 @@
 
 Some programs that make use of the [python github api](https://pygithub.readthedocs.io/en/latest/reference.html)
 
+At work, I am using this script to automate deployment tasks; most deployment tasks involve the following steps: Commit the change, open a pull request, wait for the CI build to complete and download the build log, extract an image id from the CI build log, put it in some other repository and commit the change. It is possible to automate the first three steps with the github api (if your shop is using github). The rest of the deployment process is also scriptable.
 
 help text for makepr.py
 
