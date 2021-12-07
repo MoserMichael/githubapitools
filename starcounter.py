@@ -12,6 +12,16 @@ if not "GITHUB_TOKEN" in os.environ:
     print("Error: GITHUB_TOKEN is no exported.")
     sys.exit(1)
 
+class Tab:
+    tab_ = "\t"
+
+    @staticmethod
+    def set_tab(tab):
+        Tab.tab_ = tab
+
+    @staticmethod
+    def get_tab(num=1):
+        return Tab.tab_ * num
 
 class Data:
     def __init__(self, entries=None, date=None):
@@ -111,6 +121,7 @@ def show_repo_stars(user, html_format):
     entries.sort(key=by_stars, reverse=True)
 
     if html_format:
+        Tab.set_tab("&nbsp;&nbsp;&nbsp;&nbsp;")
         print("<table><tr><th>Name</th><th>Stars</th></tr>")
 
     for entry in entries:
@@ -150,12 +161,12 @@ class RepoTraffic:
         if len(self.all_stats) != 0:
             print("Views:")
             for view in self.all_stats:
-                print("\t", view.timestamp, "total:", view.count, "unique:", view.uniques)
+                print(Tab.get_tab(), view.timestamp, "total:", view.count, "unique:", view.uniques)
 
             if len(self.referrers) != 0:
-                print("\t Referrers:")
+                print(Tab.get_tab() + "Referrers:")
                 for referrer in self.referrers:
-                    print(f"\t\tCount: {referrer.count} Unique: {referrer.uniques} Url: {referrer.referrer}")
+                    print(Tab.get_tab(2) + f"Count: {referrer.count} Unique: {referrer.uniques} Url: {referrer.referrer}")
 
         print("")
         return self.views_total
