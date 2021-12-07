@@ -27,9 +27,10 @@ class Data:
 
 
 class Entry:
-    def __init__(self, stars, name):
+    def __init__(self, stars, name, html_url):
         self.stars = stars
         self.name = name
+        self.html_url = html_url
 
 
 def show_diff_old_new(entries, old_data):
@@ -95,13 +96,13 @@ def compare_with_previous_record(entries):
             pickle.dump(Data(entries), pickle_file)
 
 
-def show_repo_stars(user):
+def show_repo_stars(user, html_format):
     all_stars = 0
 
     entries = []
     for repo in user.get_repos():
         # print("name:", repo.name, "stars:", repo.stargazers_count)
-        entries.append(Entry(repo.stargazers_count, repo.name))
+        entries.append(Entry(repo.stargazers_count, repo.name, repo.html_url))
         all_stars += repo.stargazers_count
 
     def by_stars(ent):
@@ -110,7 +111,10 @@ def show_repo_stars(user):
     entries.sort(key=by_stars, reverse=True)
 
     for entry in entries:
-        print("name:", entry.name, "stars: ", entry.stars)
+        if not html_format:
+            print("name:", entry.name, "stars: ", entry.stars)
+        else:
+            print(f'name: <a href="{entry.html_url}">{entry.name}</a> stars: {entry.stars}')
 
     print("***")
     print("total stars: ", all_stars)
@@ -219,6 +223,16 @@ This program assumes the github api to be installed - pip install python-github-
         help="time resulution of views (for --show-views)",
     )
 
+    group.add_argument(
+        "--html-links",
+        "-l",
+        default=False,
+        action='store_true',
+        dest="html_format",
+        help="project names as html links",
+    )
+
+
     return parse.parse_args(), parse
 
 
@@ -229,7 +243,7 @@ def main():
     github = Github(login_or_token="access_token", password=token)
     user = github.get_user()
     if cmd_args.show_stars:
-        show_repo_stars(user)
+        show_repo_stars(user, cmd_args.html_format)
 
     if cmd_args.show_views:
         show_repo_traffic(user, cmd_args.stat_time)
