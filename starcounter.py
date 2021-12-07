@@ -111,7 +111,7 @@ def show_repo_stars(user, html_format):
     entries.sort(key=by_stars, reverse=True)
 
     if html_format:
-        print("<table><tr><td>Name></td><td>Stars</td></tr>")
+        print("<table><tr><th>Name</th><th>Stars</th></tr>")
 
     for entry in entries:
         if not html_format:
@@ -120,11 +120,12 @@ def show_repo_stars(user, html_format):
             print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td></tr>')
 
     if html_format:
+        print("<tr><th>Total stars:</th><th>", all_stars, "</th></tr>")
         print("</table>")
-
-
-    print("***")
-    print("total stars: ", all_stars)
+        print("<br>")
+    else:
+        print("***")
+        print("total stars: ", all_stars)
 
     compare_with_previous_record(entries)
 
