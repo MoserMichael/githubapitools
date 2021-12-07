@@ -123,7 +123,8 @@ def show_repo_stars(user, html_format):
 
     if html_format:
         Tab.set_tab("&nbsp;&nbsp;&nbsp;&nbsp;")
-        print("<table><tr><th>Name</th><th>Stars</th><th>description</th></tr>")
+        print("<table><tr><th align='left'>Name</th><th align='left'>Stars</th><th align='left'>description</th></tr>")
+
 
     for entry in entries:
         if not html_format:
@@ -132,7 +133,7 @@ def show_repo_stars(user, html_format):
             print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td><td>{entry.descr}</td></tr>')
 
     if html_format:
-        print("<tr><th>Total stars:</th><th colspan='2'>", all_stars, "</th></tr>")
+        print("<tr><th>Total stars:</th><th colspan='2' align='left'>", all_stars, "</th></tr>")
         print("</table>")
         print("<br>")
     else:
