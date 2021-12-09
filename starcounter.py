@@ -229,7 +229,7 @@ This program assumes the github api to be installed - pip install python-github-
     group.add_argument(
         "--show-stars",
         "-s",
-        default=True,
+        default=False,
         action="store_true",
         dest="show_stars",
         help="show user's repositories and sort by stars"
@@ -256,7 +256,7 @@ This program assumes the github api to be installed - pip install python-github-
     group.add_argument(
         "--show-user-starred",
         "-r",
-        default=True,
+        default=False,
         action="store_true",
         dest="show_starred_by_user",
         help="show repositories that the user has given a star too"
