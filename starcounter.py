@@ -176,11 +176,7 @@ class RepoTraffic:
 
 def show_repo_traffic(user, stat_time):
 
-    print(
-        """
-Traffic report
-"""
-    )
+    print(f"\nTraffic report for user ${user.name}\n\n")
 
     entries = []
     for repo in user.get_repos():
@@ -201,9 +197,22 @@ Traffic report
         views_total += entry.show()
     print("\n***\nTotal views:", views_total)
 
+def get_starred_by_user(user, html_format):
+
+    if html_format:
+        print("<table><tr><th>Starred Repo</a></th><th>Description of starred repo</th></tr>")
+    else:
+        print(f"\n\n Repositories starred by the user {user.name}\n\n")
+
+    for repo in user.get_starred():
+        if not html_format:
+            print("repo:", repo.name,  "url:", repo.url, "description:", repo.description)
+        else:
+            print(f"<tr><td><a href=\"{repo.url}\">{repo.name}</a></td><td>{repo.description}</td></tr>")
+    if html_format:
+        print("</table>")
 
 def parse_cmd_line():
-
     usage = """
 shows number of star of project owned by current github user and usage statistics
 
@@ -223,7 +232,7 @@ This program assumes the github api to be installed - pip install python-github-
         default=True,
         action="store_true",
         dest="show_stars",
-        help="show stars",
+        help="show user's repositories and sort by stars"
     )
 
     group.add_argument(
@@ -245,6 +254,15 @@ This program assumes the github api to be installed - pip install python-github-
     )
 
     group.add_argument(
+        "--show-user-starred",
+        "-r",
+        default=True,
+        action="store_true",
+        dest="show_starred_by_user",
+        help="show repositories that the user has given a star too"
+    )
+
+    group.add_argument(
         "--html-links",
         "-l",
         default=False,
@@ -252,7 +270,6 @@ This program assumes the github api to be installed - pip install python-github-
         dest="html_format",
         help="project names as html links",
     )
-
 
     return parse.parse_args(), parse
 
@@ -263,11 +280,14 @@ def main():
     token = os.environ["GITHUB_TOKEN"]
     github = Github(login_or_token="access_token", password=token)
     user = github.get_user()
+
     if cmd_args.show_stars:
         show_repo_stars(user, cmd_args.html_format)
 
     if cmd_args.show_views:
         show_repo_traffic(user, cmd_args.stat_time)
 
+    if cmd_args.show_starred_by_user:
+        get_starred_by_user(user, cmd_args.html_format)
 
 main()
