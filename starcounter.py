@@ -208,7 +208,7 @@ def get_starred_by_user(user, html_format):
         if not html_format:
             print("repo:", repo.name,  "url:", repo.html_url, "description:", repo.description)
         else:
-            print(f"<tr><td><a href=\"{repo.url}\">{repo.name}</a></td><td>{repo.description}</td></tr>")
+            print(f"<tr><td><a href=\"{repo.html_url}\">{repo.name}</a></td><td>{repo.description}</td></tr>")
     if html_format:
         print("</table>")
 
