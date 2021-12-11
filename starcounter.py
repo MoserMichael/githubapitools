@@ -142,6 +142,11 @@ def show_repo_stars(user, html_format):
 
     compare_with_previous_record(entries)
 
+def show_stars_sum(user):
+    all_stars = 0
+    for repo in user.get_repos():
+        all_stars += repo.stargazers_count
+    print("Sum of all stars:", all_stars)
 
 class RepoTraffic:
     def __init__(self, name, traffic_stats, referrers):
@@ -176,7 +181,7 @@ class RepoTraffic:
 
 def show_repo_traffic(user, stat_time):
 
-    print(f"\nTraffic report for user ${user.name}\n\n")
+    print(f"\nTraffic report for user {user.name}\n\n")
 
     entries = []
     for repo in user.get_repos():
@@ -283,6 +288,8 @@ def main():
 
     if cmd_args.show_stars:
         show_repo_stars(user, cmd_args.html_format)
+    else:
+        show_stars_sum(user)
 
     if cmd_args.show_views:
         show_repo_traffic(user, cmd_args.stat_time)
