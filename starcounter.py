@@ -288,8 +288,6 @@ def main():
 
     if cmd_args.show_stars:
         show_repo_stars(user, cmd_args.html_format)
-    else:
-        show_stars_sum(user)
 
     if cmd_args.show_views:
         show_repo_traffic(user, cmd_args.stat_time)
