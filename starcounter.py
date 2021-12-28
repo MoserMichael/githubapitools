@@ -123,14 +123,14 @@ def show_repo_stars(user, html_format):
 
     if html_format:
         Tab.set_tab("&nbsp;&nbsp;&nbsp;&nbsp;")
-        print("<table><tr><th align='left'>Name</th><th align='left'>Stars</th><th align='left'>description</th></tr>")
+        print("<table><tr><th align='left'>Name</th><th align='left'>Stars</th><th align='left'>Language</th><th align='left'>description</th></tr>")
 
 
     for entry in entries:
         if not html_format:
             print("name:", entry.name, "stars: ", entry.stars)
         else:
-            print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td><td>{entry.descr}</td></tr>')
+            print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td><td>{entry.language}</td><td>{entry.descr}</td></tr>')
 
     if html_format:
         print("<tr><th>Total stars:</th><th colspan='2' align='left'>", all_stars, "</th></tr>")
@@ -205,7 +205,7 @@ def show_repo_traffic(user, stat_time):
 def get_starred_by_user(user, html_format):
 
     if html_format:
-        print("<table><tr><th>Starred Repo</a></th><th>Description of starred repo</th></tr>")
+        print("<table><tr><th align='left'>Starred Repo</a></th align='left'><th align='left'>Language</th><th>Description of starred repo</th></tr>")
     else:
         print(f"\n\n Repositories starred by the user {user.name}\n\n")
 
@@ -213,7 +213,7 @@ def get_starred_by_user(user, html_format):
         if not html_format:
             print("repo:", repo.name,  "url:", repo.html_url, "description:", repo.description)
         else:
-            print(f"<tr><td><a href=\"{repo.html_url}\">{repo.name}</a></td><td>{repo.description}</td></tr>")
+            print(f"<tr><td><a href=\"{repo.html_url}\">{repo.name}</a></td><td>{repo.language}</th><td>{repo.description}</td></tr>")
     if html_format:
         print("</table>")
 
