@@ -37,11 +37,9 @@ class Data:
 
 
 class Entry:
-    def __init__(self, stars, name, html_url, descr):
-        self.stars = stars
-        self.name = name
-        self.html_url = html_url
-        self.descr = descr
+    def __init__(self, repo):
+        self.stars = repo.stargazers_count
+        self.repo = repo
 
 
 def show_diff_old_new(entries, old_data):
@@ -113,7 +111,7 @@ def show_repo_stars(user, html_format):
     entries = []
     for repo in user.get_repos():
         # print("name:", repo.name, "stars:", repo.stargazers_count)
-        entries.append(Entry(repo.stargazers_count, repo.name, repo.html_url, repo.description))
+        entries.append(Entry(repo))
         all_stars += repo.stargazers_count
 
     def by_stars(ent):
@@ -128,9 +126,9 @@ def show_repo_stars(user, html_format):
 
     for entry in entries:
         if not html_format:
-            print("name:", entry.name, "stars: ", entry.stars)
+            print("name:", entry.repo.name, "stars: ", entry.stars)
         else:
-            print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td><td>{entry.language}</td><td>{entry.descr}</td></tr>')
+            print(f'<tr><td><a href="{entry.repo.html_url}">{entry.repo.name}</a></td><td>{entry.stars}</td><td>{entry.repo.language}</td><td>{entry.repo.description}</td></tr>')
 
     if html_format:
         print("<tr><th>Total stars:</th><th colspan='2' align='left'>", all_stars, "</th></tr>")
