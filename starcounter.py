@@ -39,7 +39,11 @@ class Data:
 class Entry:
     def __init__(self, repo):
         self.stars = repo.stargazers_count
-        self.repo = repo
+        self.name = repo.name
+        self.html_url = repo.html_url
+        self.language = repo.language
+        self.description = repo.description
+
 
 
 def show_diff_old_new(entries, old_data):
@@ -74,7 +78,7 @@ def diff_it(entries, old_data):
 
     for entry in entries:
         for old_entry in old_entries:
-            if entry.repo.name == old_entry.repo.name:
+            if entry.name == old_entry.name:
                 if entry.stars != old_entry.stars:
                     return True
 
@@ -126,9 +130,9 @@ def show_repo_stars(user, html_format):
 
     for entry in entries:
         if not html_format:
-            print("name:", entry.repo.name, "stars: ", entry.stars)
+            print("name:", entry.name, "stars: ", entry.stars)
         else:
-            print(f'<tr><td><a href="{entry.repo.html_url}">{entry.repo.name}</a></td><td>{entry.stars}</td><td>{entry.repo.language}</td><td>{entry.repo.description}</td></tr>')
+            print(f'<tr><td><a href="{entry.html_url}">{entry.name}</a></td><td>{entry.stars}</td><td>{entry.language}</td><td>{entry.description}</td></tr>')
 
     if html_format:
         print("<tr><th>Total stars:</th><th colspan='2' align='left'>", all_stars, "</th></tr>")
