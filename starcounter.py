@@ -74,7 +74,7 @@ def diff_it(entries, old_data):
 
     for entry in entries:
         for old_entry in old_entries:
-            if entry.name == old_entry.name:
+            if entry.repo.name == old_entry.repo.name:
                 if entry.stars != old_entry.stars:
                     return True
 
