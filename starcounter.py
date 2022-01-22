@@ -219,6 +219,23 @@ def get_starred_by_user(user, html_format):
     if html_format:
         print("</table>")
 
+def follow_everyone(user):
+    added_to_following = 0
+    for repo in user.get_repos():
+        #print("name:", repo.name, "stars:", repo.stargazers_count)
+        for starrer in repo.get_stargazers():
+            if starrer.login != user.login:
+                if not user.has_in_following(starrer):
+                    print(f"Adding user {starrer.name} {repr(starrer)} who starrred repo {repo.name} to set of followed users")
+                    user.add_to_following(starrer)
+                    added_to_following += 1
+    #            else:
+    #                print(f"User {starrer.name} is already beeing followed")
+
+    print("---")
+    print(f"added {added_to_following} users to following")
+
+
 def parse_cmd_line():
     usage = """
 shows number of star of project owned by current github user and usage statistics
@@ -278,6 +295,18 @@ This program assumes the github api to be installed - pip install python-github-
         help="project names as html links",
     )
 
+    group = parse.add_argument_group("follow every user who gave a star on a project"
+            )
+
+    group.add_argument(
+        "--follow-everyone",
+        "-f",
+        default=False,
+        action="store_true",
+        dest="follow_everyone",
+        help="follow every user who gave a star on a project"
+    )
+
     return parse.parse_args(), parse
 
 
@@ -296,5 +325,8 @@ def main():
 
     if cmd_args.show_starred_by_user:
         get_starred_by_user(user, cmd_args.html_format)
+
+    if cmd_args.follow_everyone:
+        follow_everyone(user)
 
 main()
