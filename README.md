@@ -47,6 +47,8 @@ help text for starcounter.py
 
 ```
 usage: starcounter.py [-h] [--show-stars] [--show-views]
+                      [--stats-time STAT_TIME] [--show-user-starred]
+                      [--html-links] [--follow-everyone]
 
 shows number of star of project owned by current github user and usage
 statistics This program assumes that the environment GITHUB_TOKEN is exported,
@@ -56,13 +58,24 @@ then stored in the starcounter.data file. This program assumes the github api
 to be installed - pip install python-github-api
 
 optional arguments:
-  -h, --help        show this help message and exit
+  -h, --help            show this help message and exit
 
 view github data on current users repositories:
-  --show-stars, -s  show stars (default: True)
-  --show-views, -v  show views (default: False)
+  --show-stars, -s      show user's repositories and sort by stars (default:
+                        False)
+  --show-views, -v      show views (default: False)
   --stats-time STAT_TIME, -t STAT_TIME
-                        time resulution of views (for --show-views) (default: week)
+                        time resulution of views (for --show-views) (default:
+                        week)
+  --show-user-starred, -r
+                        show repositories that the user has given a star too
+                        (default: False)
+  --html-links, -l      project names as html links (default: False)
+
+follow every user who gave a star on a project:
+  --follow-everyone, -f
+                        follow every user who gave a star on a project
+                        (default: False)
 ```
 
 Also it gives you some visitor statistics, without having to use the google analytics spyware. (I am not using google analytics)
