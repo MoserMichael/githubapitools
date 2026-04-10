@@ -167,10 +167,11 @@ class RepoTraffic:
             "unique: ",
             self.views_unique,
         )
-        if len(self.all_stats) != 0:
+        if self.views_total != 0 or self.views_unique != 0:
             print("Views:")
             for view in self.all_stats:
-                print(Tab.get_tab(), view.timestamp, "total:", view.count, "unique:", view.uniques)
+                if view.uniques:
+                    print(Tab.get_tab(), view.timestamp, "total:", view.count, "unique:", view.uniques)
 
             if len(self.referrers) != 0:
                 print(Tab.get_tab() + "Referrers:")
