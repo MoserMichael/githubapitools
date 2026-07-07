@@ -7,6 +7,7 @@ import datetime
 from pathlib import Path
 import argparse
 from github import Github
+from github import Auth
 
 if not "GITHUB_TOKEN" in os.environ:
     print("Error: GITHUB_TOKEN is no exported.")
@@ -162,7 +163,7 @@ class RepoTraffic:
         print(
             "repo:",
             self.name,
-            "views: total:",
+            "views - total:",
             self.views_total,
             "unique: ",
             self.views_unique,
@@ -315,7 +316,12 @@ def main():
     cmd_args, _ = parse_cmd_line()
 
     token = os.environ["GITHUB_TOKEN"]
-    github = Github(login_or_token="access_token", password=token)
+    
+    #github = Github(login_or_token="access_token", password=token)
+
+    auth = Auth.Token(token)
+    github = Github(auth=auth)
+
     user = github.get_user()
 
     if cmd_args.show_stars:
