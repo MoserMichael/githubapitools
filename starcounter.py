@@ -153,9 +153,9 @@ def show_stars_sum(user):
 class RepoTraffic:
     def __init__(self, name, traffic_stats, referrers):
         self.name = name
-        self.views_total = int(traffic_stats["count"])
-        self.views_unique = int(traffic_stats["uniques"])
-        self.all_stats = traffic_stats["views"]
+        self.views_total = int(traffic_stats.count)
+        self.views_unique = int(traffic_stats.uniques)
+        self.all_stats = traffic_stats.views
         self.referrers = referrers
 
     def show(self):
